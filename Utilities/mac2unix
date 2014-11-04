@@ -1,0 +1,26 @@
+#!/usr/bin/perl -w
+use strict;
+use Data::Dumper;
+
+unless ($ARGV[0]){
+  print "\nReplaces carriage returns from mac text files with new lines\n";
+  print "Warning: replaces existing file with new file of same name\n";
+  print "\nUsage: mac2unix file.txt\n";
+  exit;
+}
+
+my $infile=$ARGV[0];
+my $tmpfile=$infile.".mac2unixtmp";
+
+open (IN, $infile) or die "can't open $infile for read\n";
+open (TMP, ">$tmpfile") or die "can't open $tmpfile for write\n";
+
+while(<IN>){
+  $_=~s/\r/\n/g;
+  print TMP "$_";
+}
+
+close IN;
+close TMP;
+
+rename ($tmpfile,$infile);
